@@ -2,10 +2,12 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const axios = require('axios');
+const { Pool } = require('pg');
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-
+const DATABASE_URL = "postgresql://neondb_owner:npg_Xd82rKvTMChg@ep-divine-bread-ad7tqb6j-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
 
 // 미들웨어
 app.use(cors());
@@ -13,6 +15,15 @@ app.use(express.json());
 
 // 정적 파일 서빙
 app.use(express.static(path.join(__dirname, 'dist')));
+
+// PostgreSQL 연결 풀
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
 
 // 창원 버스 API 프록시
 const CHANGWON_API_KEY = process.env.CHANGWON_API_KEY || '';
