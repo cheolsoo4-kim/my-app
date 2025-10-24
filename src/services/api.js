@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // Swagger API 기본 설정
-const API_BASE_URL = 'http://192.168.146.128:8080/api' // 실제 API URL로 변경
+const API_BASE_URL = 'http://localhost:8080/api' // 실제 API URL로 변경
 
 const api = axios.create({
   baseURL: API_BASE_URL,

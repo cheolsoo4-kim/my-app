@@ -4,7 +4,7 @@ const cors = require('cors');
 const axios = require('axios');
 
 const app = express();
-const PORT = process.env.PORT || 9080;
+const PORT = process.env.PORT || 8080;
 
 
 // 미들웨어
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // 창원 버스 API 프록시
-const CHANGWON_API_KEY = process.env.CHANGWON_API_KEY || 'bf6d48879fe4c24ce4b10e020a96281fcf95cd3dad229435362d8e0418ed9340';
+const CHANGWON_API_KEY = process.env.CHANGWON_API_KEY || '';
 
 app.get('/api/bus/arrival/:stationId', async (req, res) => {
   try {
