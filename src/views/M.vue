@@ -1,7 +1,7 @@
 <template>
   <div class="m-page">
     <div class="container">
-      <h1>test Page</h1>
+      <h1>Demo Page</h1>
 <p>각각 테스트  페이지입니다</p>
       
       <div class="features">
