@@ -15,6 +15,10 @@ https://github.com/cheolsoo4-kim/my-app<br>
           <h3>퀴즈(태양이꺼)</h3>
 	  <p>json데이터(.js)로 구현한 퀴즈<br> (sql[X],단일페이지) </p>
         </div>
+        <div class="feature-card" @click="goToQuiz2">
+          <h3>퀴즈(태양이꺼) ver2</h3>
+	  <p>json데이터(.js)로 구현한 퀴즈<br> (sql[X],단일페이지) </p>
+        </div>
 	      <div class="feature-card" @click="goToTest">
           <h3>대시보드</h3>
 	  <p>json데이터로 구현한 대시 보드<br> (sql[X],단일페이지) </p>
@@ -70,6 +74,9 @@ export default {
 		},
 		goToQuiz(){
 			this.$router.push('/q1');
+		},
+		goToQuiz2(){
+			this.$router.push('/q2');
 		}
 
 
