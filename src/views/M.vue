@@ -6,6 +6,8 @@
 웹호스팅은 koyeb.com <br>
 db(PostgreSql15)는 neon.tech<br>
 node.js + vue3의 사이트 입니다.<br>
+모든 소스는 gitHub에 commit되어 있습니다<br>
+https://github.com/cheolsoo4-kim/my-app<br>
 </p>
       
       <div class="features">
