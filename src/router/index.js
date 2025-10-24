@@ -14,7 +14,13 @@ const routes = [
     name: 'g2',
     component: () => import('@/views/g2.vue'),
     meta: { title: 'g2' }
-  },
+  },{
+    path: '/q1',
+    name: 'q1',
+    component: () => import('@/views/quiz.vue'),
+    meta: { title: 'q1' }
+  }
+  ,
   {
     path: '/g1',
     name: 'g1',

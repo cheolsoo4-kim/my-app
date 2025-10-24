@@ -2,9 +2,17 @@
   <div class="m-page">
     <div class="container">
       <h1>Demo Page</h1>
-<p>각각 테스트  페이지입니다</p>
+<p>각각 테스트  페이지입니다<br>
+웹호스팅은 koyeb.com <br>
+db(PostgreSql15)는 neon.tech<br>
+node.js + vue3의 사이트 입니다.<br>
+</p>
       
       <div class="features">
+      <div class="feature-card" @click="goToQuiz">
+          <h3>퀴즈(태양이꺼)</h3>
+	  <p>json데이터(.js)로 구현한 퀴즈<br> (sql[X],단일페이지) </p>
+        </div>
 	      <div class="feature-card" @click="goToTest">
           <h3>대시보드</h3>
 	  <p>json데이터로 구현한 대시 보드<br> (sql[X],단일페이지) </p>
@@ -57,6 +65,9 @@ export default {
 		},
 		goTog2(){
 			this.$router.push('/g2');
+		},
+		goToQuiz(){
+			this.$router.push('/q1');
 		}
 
 
