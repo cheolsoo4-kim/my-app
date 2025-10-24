@@ -214,6 +214,7 @@ export default {
     },
 
     closeModal() {
+      this.showConfigModal = false;
       if (this.isConfigured) {
         this.showConfigModal = false;
       }
