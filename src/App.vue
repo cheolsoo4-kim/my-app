@@ -59,7 +59,7 @@
 
         <!-- 푸터 (특정 페이지에서만 숨김) -->
         <a-layout-footer v-if="showFooter" class="footer">
-          My App ©2024 Created with Vue 3 + Vite + Ant Design Vue
+          My App ©2024 Created with Vue 3 + Vite + Ant Design + OpenAPI + swagger-ui
         </a-layout-footer>
       </a-layout>
 
