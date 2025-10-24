@@ -9,6 +9,23 @@ const routes = [
     name: 'Home',
     component: () => import('@/views/Home.vue'),
     meta: { title: 'Home' }
+  },{
+    path: '/g2',
+    name: 'g2',
+    component: () => import('@/views/g2.vue'),
+    meta: { title: 'g2' }
+  },
+  {
+    path: '/g1',
+    name: 'g1',
+    component: () => import('@/views/g1.vue'),
+    meta: { title: 'g' }
+  },
+  {
+    path: '/sample',
+    name: 'Sample',
+    component: () => import('@/views/sample.vue'),
+    meta: { title: 'Sample' }
   },
   {
     path: '/youtube',

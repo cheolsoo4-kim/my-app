@@ -9,6 +9,14 @@
           <h3>대시보드</h3>
 	  <p>json데이터로 구현한 대시 보드<br> (sql[X],단일페이지) </p>
         </div>
+        <div class="feature-card" @click="goTog2">
+          <h3>룰렛게임</h3>
+<p>Vue스크립트만 사용</p>
+        </div>
+        <div class="feature-card" @click="goTog1">
+          <h3>스핀게임</h3>
+<p>vue스크립트만 사용</p>
+        </div>
 <div class="feature-card" @click="goToType">
 	<h3>타자[단어]게임</h3>
 	<p>PostgreSql15+vue3.0<br>+antd+node.js<br>+swagger-ui</p>
@@ -43,6 +51,12 @@ export default {
 		},
 		goToBus(){
 			this.$router.push('/bus');
+		},
+		goTog1(){
+			this.$router.push('/g1');
+		},
+		goTog2(){
+			this.$router.push('/g2');
 		}
 
 
