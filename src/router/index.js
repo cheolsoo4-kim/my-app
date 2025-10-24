@@ -19,6 +19,11 @@ const routes = [
     name: 'q1',
     component: () => import('@/views/quiz.vue'),
     meta: { title: 'q1' }
+  },{
+    path: '/q2',
+    name: 'q2',
+    component: () => import('@/views/q2.vue'),
+    meta: { title: 'q2' }
   }
   ,
   {
