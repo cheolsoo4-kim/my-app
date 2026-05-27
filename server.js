@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <div class="box">
-                <h2>Node.js 무력화 방지 보안 프록시 v3</h2>
+                <h2>Node.js 보안 v3</h2>
                 <form method="GET" action="/bypass">
                     <input type="text" name="url" placeholder="https://www.google.com" required>
                     <input type="submit" value="안전 우회 접속">
