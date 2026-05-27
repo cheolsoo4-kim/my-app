@@ -1,116 +1,66 @@
 const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const axios = require('axios');
-const { Pool } = require('pg');
-
-
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
-const PORT = process.env.PORT || 8080;
-const DATABASE_URL = "postgresql://neondb_owner:npg_Xd82rKvTMChg@ep-divine-bread-ad7tqb6j-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
+const PORT = process.env.PORT || 3000;
 
-// 미들웨어
-app.use(cors());
-app.use(express.json());
-
-// 정적 파일 서빙
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// PostgreSQL 연결 풀
-const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+// 1. 기본 UI 메인 화면 (주소창에 접속했을 때 나타남)
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Render Private Proxy</title>
+            <style>
+                body { font-family: sans-serif; text-align: center; padding-top: 100px; background: #f0f2f5; }
+                .box { background: white; padding: 40px; display: inline-block; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+                input[type="text"] { width: 400px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+                input[type="submit"] { padding: 12px 24px; background: #4f46e5; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+                input[type="submit"]:hover { background: #4338ca; }
+            </style>
+        </head>
+        <body>
+            <div class="box">
+                <h2>Render 전용 무차단 스마트 프록시</h2>
+                <form method="GET" action="/bypass">
+                    <input type="text" name="url" placeholder="https://www.google.com" required>
+                    <input type="submit" value="우회 접속 시작">
+                </form>
+            </div>
+        </body>
+        </html>
+    `);
 });
 
+// 2. [핵심] 웹서핑 우회 라우터 엔진
+app.use('/bypass', (req, res, next) => {
+    let targetUrl = req.query.url;
+    if (!targetUrl) return res.status(400).send('URL이 누락되었습니다.');
 
-// 창원 버스 API 프록시
-const CHANGWON_API_KEY = process.env.CHANGWON_API_KEY || '';
+    // 프로토콜 자동 보정
+    if (!/^https?:\/\//i.test(targetUrl)) {
+        targetUrl = 'http://' + targetUrl;
+    }
 
-app.get('/api/bus/arrival/:stationId', async (req, res) => {
-  try {
-    const { stationId } = req.params;
-    
-    // 더미 데이터 반환
-    const dummyData = {
-      success: true,
-      data: [
-        {
-          routeName: '220',
-          arrivalTime1: Math.floor(Math.random() * 15) + 1,
-          remainingStops1: Math.floor(Math.random() * 8) + 1,
-          arrivalTime2: Math.floor(Math.random() * 20) + 10
+    // 미들웨어를 동적으로 생성하여 타겟 사이트 대리 수신 실행
+    createProxyMiddleware({
+        target: targetUrl,
+        changeOrigin: true,
+        followRedirects: true, // 리다이렉트 자동 추적 활성화
+        pathRewrite: (path, req) => {
+            // 내부 쿼리스트링 파싱 후 순수 타겟 경로만 남김
+            return ''; 
         },
-        {
-          routeName: '221', 
-          arrivalTime1: Math.floor(Math.random() * 12) + 2,
-          remainingStops1: Math.floor(Math.random() * 6) + 2
+        onProxyReq: (proxyReq, req, res) => {
+            // 회사 방화벽이나 웹서버 감지를 피하기 위해 일반 브라우저 헤더로 마스킹
+            proxyReq.setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        },
+        onError: (err, req, res) => {
+            res.status(500).send('프록시 통신 중 오류가 발생했습니다: ' + err.message);
         }
-      ]
-    };
-    
-    res.json(dummyData);
-  } catch (error) {
-    console.error('API Error:', error);
-    res.status(500).json({ error: 'Failed to fetch bus arrival info' });
-  }
+    })(req, res, next);
 });
 
-app.get('/api/bus/position/:routeId', async (req, res) => {
-  try {
-    const { routeId } = req.params;
-    
-    const dummyData = {
-      success: true,
-      data: [{
-        routeId: routeId,
-        vehicleId: `경남70바${Math.floor(Math.random() * 9999)}`,
-        stationName: ['창원역', '시청앞', '용호동', '봉림동'][Math.floor(Math.random() * 4)],
-        vehicleStatus: Math.floor(Math.random() * 4).toString()
-      }]
-    };
-    
-    res.json(dummyData);
-  } catch (error) {
-    console.error('API Error:', error);
-    res.status(500).json({ error: 'Failed to fetch bus position info' });
-  }
+app.listen(PORT, () => {
+    console.log(`Proxy server is running on port ${PORT}`);
 });
-
-// 헬스체크
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    version: process.env.npm_package_version || '1.0.0'
-  });
-});
-
-// Vue 라우터 지원
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-// 에러 핸들링
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// 서버 시작
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Process terminated');
-    process.exit(0);
-  });
-});
-
-export default app;
